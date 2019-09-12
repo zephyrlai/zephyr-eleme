@@ -26,7 +26,6 @@
             itemClasses(){
                 let result = [];
                 const score = Math.floor(this.score * 2)/2;
-                console.log(this.score,"---",score);
                 const floatFlag = score%1 !== 0;
                 const integer = Math.floor(score);
                 for (let i = 0; i < integer; i++) {
@@ -37,7 +36,6 @@
                 while (result.length < LENGTH) {
                     result.push(CLS_OFF)
                 }
-                console.log(result);
                 return result;
             }
         }

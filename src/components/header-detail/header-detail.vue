@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-show="visible" class="header-detail" @touchmove.stop.prevent>
+    <div v-show="visiable" class="header-detail" @touchmove.stop.prevent>
       <div class="detail-wrapper clear-fix">
         <div class="detail-main">
           <h1 class="name">{{seller.name}}</h1>
@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="detail-close" @click="hide">
-        <i class="icon-close"></i>
+        <i class="icon-close">x</i>
       </div>
     </div>
   </transition>
@@ -41,17 +41,26 @@
 
   export default {
     name: 'header-detail',
+    data() {
+        return {
+            visiable: false,
+        }
+    },
     props: {
       seller: {
         type: Object,
         default() {
           return {}
         }
-      }
+      },
     },
     methods: {
-        hide(){},
-        visible(){}
+        hide(){
+            this.visiable = false;
+        },
+        show(){
+            this.visiable = true;
+        }
     },
     components: {
       SupportIco,

@@ -34,6 +34,7 @@
 
 <script type="text/ecmascript-6">
     import SupportIco from '../support-ico/support-ico.vue'
+    import {  } from "../../register";
 
     export default {
         name: 'v-header',
@@ -50,7 +51,12 @@
         },
         methods: {
             showDetail() {
-
+                const headerDetailComp = this.headerDetailComp || this.$createHeaderDetail({
+                    $props: {
+                        seller: this.seller,
+                    }
+                });
+                headerDetailComp.show();
             }
         }
     }
