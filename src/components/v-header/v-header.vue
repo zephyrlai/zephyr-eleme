@@ -47,12 +47,18 @@
         },
         components: {
             SupportIco
+        },
+        methods: {
+            showDetail() {
+
+            }
         }
     }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
   @import "~common/stylus/mixin"
+  @import "~common/stylus/variable"
 
   .header
     position: relative

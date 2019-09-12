@@ -1,5 +1,5 @@
 <template>
-    <span :class="myIconClass"></span>
+    <span class='support-ico' :class="myIconClass"></span>
 </template>
 
 <script>
@@ -16,7 +16,7 @@
         computed: {
             myIconClass() {
                 const classArray = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-                return 'icon-${this.size} ${classArray[this.type]}';
+                return `icon-${this.size} ${classArray[this.type]}`;
             }
         }
     }
