@@ -1,0 +1,43 @@
+const appData = require('./data.json')
+const seller = appData.seller;
+const goods = appData.goods;
+const ratings = appData.ratings;
+
+module.exports = {
+  css: {
+    loaderOptions: {
+      stylus: {
+        'resolve url': true,
+        'import': []
+      }
+    }
+  },
+  pluginOptions: {
+    'cube-ui': {
+      postCompile: true,
+      theme: false
+    }
+  },
+  devServer: {
+    before(app) {
+      app.get('/api/seller', function (req, res) {
+        res.json({
+          code: 0,
+          data: seller
+        })
+      });
+      app.get('/api/goods', function (req, res) {
+        res.json({
+          code: 0,
+          data: goods
+        })
+      });
+      app.get('/api/ratings', function (req, res) {
+        res.json({
+          code: 0,
+          data: ratings
+        })
+      });
+    }
+  },
+}
