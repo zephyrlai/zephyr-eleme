@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-header :seller="seller"></v-header>
-    <!-- <header-detail :seller="seller"></header-detail> -->
+    <tab></tab>
   </div>
 </template>
 
@@ -9,6 +9,7 @@
 import VHeader from './components/v-header/v-header.vue';
 import HeaderDetail from './components/header-detail/header-detail';
 import { getSeller } from "./components/api";
+import Tab from './components/tab/tab'
 
 export default {
   name: 'app',
@@ -29,7 +30,8 @@ export default {
   },
   components: {
     VHeader,
-    HeaderDetail
+    HeaderDetail,
+    Tab
   }
 }
 </script>
