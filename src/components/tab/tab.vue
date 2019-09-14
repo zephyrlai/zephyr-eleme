@@ -20,35 +20,33 @@
         @scroll="onScroll"
         :options='scrollOptions'
       >
-      <cube-slide-item>
-          <goods></goods>
-      </cube-slide-item>
-      <cube-slide-item>
-          <ratings></ratings>
-      </cube-slide-item>
-      <cube-slide-item>
-          <seller></seller>
-      </cube-slide-item>
+        <cube-slide-item v-for="(item,index) in tabs" :key='index'>
+            <!-- vue动态组件技术，接收组件与数据 -->
+            <component :is='item.component' :data='item.data'></component>
+        </cube-slide-item>
       </cube-slide>
     </div>
   </div>
 </template>
 
 <script>
-import Goods from '../../components/goods/goods'
-import Seller from '../../components/seller/seller'
-import Ratings from '../../components/ratings/ratings'
+// import Goods from '../../components/goods/goods'
+// import Seller from '../../components/seller/seller'
+// import Ratings from '../../components/ratings/ratings'
 
 export default {
     name: 'tab',
+    props: {
+      tabs: {
+        type: Array,
+        default() {
+          return [];
+        }
+      }
+    },
     data() {
         return {
             index: 0,
-            tabs: [
-                {label:'商品'},
-                {label:'评价'},
-                {label:'店铺'}
-            ],
             scrollOptions: {
               listenScroll: true,
               probeType: 3
@@ -77,14 +75,8 @@ export default {
           const tabBar = this.$refs.tabBar;
           const tabWidth = tabBar.$el.clientWidth;
           const scrollPercent = -pos.x/this.$refs.slide.slide.scrollerWidth;
-          this.$refs.tabBar.setSliderTransform(tabWidth * scrollPercent)
-          
+          tabBar.setSliderTransform(tabWidth * scrollPercent)
       }
-    },
-    components: {
-        Goods,
-        Seller,
-        Ratings
     }
 }
 
