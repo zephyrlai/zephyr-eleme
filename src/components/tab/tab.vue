@@ -1,6 +1,7 @@
 <template>
   <div class="tab">
     <cube-tab-bar
+      :useTransition = false 
       :showSlider=true
       v-model="selectedLabel"
       :data="tabs"
@@ -15,6 +16,9 @@
         :show-dots=false
         :initial-index="index"
         ref="slide"
+        @change="onChange"
+        @scroll="onScroll"
+        :options='scrollOptions'
       >
       <cube-slide-item>
           <goods></goods>
@@ -44,7 +48,11 @@ export default {
                 {label:'商品'},
                 {label:'评价'},
                 {label:'店铺'}
-            ]
+            ],
+            scrollOptions: {
+              listenScroll: true,
+              probeType: 3
+            }
         }
     },
     computed: {
@@ -59,6 +67,19 @@ export default {
             }
 
         }
+    },
+    methods: {
+      onChange(newIndex) {
+          this.index = newIndex;
+      },
+      onScroll(pos){
+          // console.log(pos.x);
+          const tabBar = this.$refs.tabBar;
+          const tabWidth = tabBar.$el.clientWidth;
+          const scrollPercent = -pos.x/this.$refs.slide.slide.scrollerWidth;
+          this.$refs.tabBar.setSliderTransform(tabWidth * scrollPercent)
+          
+      }
     },
     components: {
         Goods,
