@@ -37,7 +37,7 @@
         >
           <ul>
             <li
-              @click="selectFood(food)"
+              
               v-for="food in good.foods"
               :key="food.name"
               class="food-item"
@@ -55,9 +55,10 @@
                   <span class="now">￥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
-                <!-- <div class="cart-control-wrapper">
-                  <cart-control @add="onAdd" :food="food"></cart-control>
-                </div> -->
+                <!-- 单个商品的加减按钮 -->
+                <div class="cart-control-wrapper">
+                  <cart-control :food="food"></cart-control>
+                </div>
               </div>
             </li>
           </ul>
@@ -76,6 +77,9 @@
 
 <script>
 import { getGoods } from "../api/index";
+import ShopCart from '../shop-cart/shop-cart';
+import CartControl from '../cart-control/cart-control';
+
 export default {
   data() {
     return {
@@ -88,20 +92,41 @@ export default {
     }
   },
   props: {
-    seller: {
+    data: {
       type:Object
     }
   },
   methods: {
+    // 请求接口后赋值
     getData() {
       getGoods().then((goods) => {
         this.goods = goods;
       })
     },
-    onAdd(){},
-    selectFoods() {},
+    // onAdd(){},
     barTxts() {}
-  }
+  },
+  computed: {
+    seller() {
+      return this.data.seller
+    },
+    selectFoods() {
+      let foodList = [];
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if(food.count){
+            foodList.push(food);
+          }
+        })
+      });
+      return foodList;
+
+    }
+  },
+    components: {
+      ShopCart,
+      CartControl
+    }
 
 }
 </script>
