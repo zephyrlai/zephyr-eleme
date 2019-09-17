@@ -11,6 +11,8 @@
 </template>
 
 <script>
+const EVENT_ADD='add'
+
 export default {
     name:'cart-control',
     props: {
@@ -19,13 +21,14 @@ export default {
         }
     },
     methods: {
-        add(){
+        add(event){
             if(!this.food.count){
                 // 动态添加属性（与java反射类似）
                 this.$set(this.food,'count',1);
             }else{
                 this.food.count++;
             }
+            this.$emit(EVENT_ADD,event.target);
         },
         decrease() {
             if(this.food.count>0){

@@ -57,7 +57,7 @@
                 </div>
                 <!-- 单个商品的加减按钮 -->
                 <div class="cart-control-wrapper">
-                  <cart-control :food="food"></cart-control>
+                  <cart-control @add='onAdd' :food="food"></cart-control>
                 </div>
               </div>
             </li>
@@ -103,7 +103,9 @@ export default {
         this.goods = goods;
       })
     },
-    // onAdd(){},
+    onAdd(target){
+      this.$refs.shopCart.drop(target);
+    },
     barTxts() {}
   },
   computed: {

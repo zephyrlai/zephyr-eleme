@@ -20,7 +20,7 @@
           </div>
         </div>
       </div>
-      <!-- <div class="ball-container">
+      <div class="ball-container">
         <div v-for="(ball,index) in balls" :key="index">
           <transition
             @before-enter="beforeDrop"
@@ -30,7 +30,7 @@
               <div class="inner inner-hook"></div>
             </div>
           </transition>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -120,27 +120,8 @@
     },
     methods: {
       toggleList() {
-        if (this.listFold) {
-          if (!this.totalCount) {
-            return
-          }
-          this.listFold = false
-          this._showShopCartList()
-          this._showShopCartSticky()
-        } else {
-          this.listFold = true
-          this._hideShopCartList()
-        }
       },
       pay(e) {
-        if (this.totalPrice < this.minPrice) {
-          return
-        }
-        this.$createDialog({
-          title: '支付',
-          content: `您需要支付${this.totalPrice}元`
-        }).show()
-        e.stopPropagation()
       },
       drop(el) {
         for (let i = 0; i < this.balls.length; i++) {
@@ -156,14 +137,16 @@
       beforeDrop(el) {
         const ball = this.dropBalls[this.dropBalls.length - 1]
         const rect = ball.el.getBoundingClientRect()
+        // x、y的正向是右下方（原点位于浏览器的左上角）
         const x = rect.left - 32
         const y = -(window.innerHeight - rect.top - 22)
-        el.style.display = ''
+        // el.style.display = true
         el.style.transform = el.style.webkitTransform = `translate3d(0,${y}px,0)`
         const inner = el.getElementsByClassName(innerClsHook)[0]
         inner.style.transform = inner.style.webkitTransform = `translate3d(${x}px,0,0)`
       },
       dropping(el, done) {
+        // 触发浏览器重绘
         this._reflow = document.body.offsetHeight
         el.style.transform = el.style.webkitTransform = `translate3d(0,0,0)`
         const inner = el.getElementsByClassName(innerClsHook)[0]
@@ -178,42 +161,12 @@
         }
       },
       _showShopCartList() {
-        this.shopCartListComp = this.shopCartListComp || this.$createShopCartList({
-          $props: {
-            selectFoods: 'selectFoods'
-          },
-          $events: {
-            leave: () => {
-              this._hideShopCartSticky()
-            },
-            hide: () => {
-              this.listFold = true
-            },
-            add: (el) => {
-              this.shopCartStickyComp.drop(el)
-            }
-          }
-        })
-        this.shopCartListComp.show()
       },
       _showShopCartSticky() {
-        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
-          $props: {
-            selectFoods: 'selectFoods',
-            deliveryPrice: 'deliveryPrice',
-            minPrice: 'minPrice',
-            fold: 'listFold',
-            list: this.shopCartListComp
-          }
-        })
-        this.shopCartStickyComp.show()
       },
       _hideShopCartList() {
-        const list = this.sticky ? this.$parent.list : this.shopCartListComp
-        list.hide && list.hide()
       },
       _hideShopCartSticky() {
-        this.shopCartStickyComp.hide()
       }
     },
     watch: {
