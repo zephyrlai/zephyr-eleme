@@ -22,7 +22,7 @@
       >
         <cube-slide-item v-for="(item,index) in tabs" :key='index'>
             <!-- vue动态组件技术，接收组件与数据 -->
-            <component :is='item.component' :data='item.data'></component>
+            <component :is='item.component' :data='item.data' ref='component'></component>
         </cube-slide-item>
       </cube-slide>
     </div>
@@ -66,9 +66,14 @@ export default {
 
         }
     },
+    mounted() {
+      this.onChange(this.index);
+    },
     methods: {
       onChange(newIndex) {
           this.index = newIndex;
+          const comp = this.$refs.component[newIndex];
+          comp && comp.getData && comp.getData(); 
       },
       onScroll(pos){
           // console.log(pos.x);
