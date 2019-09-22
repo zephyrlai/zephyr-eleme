@@ -7,14 +7,15 @@
         :options="scrollOptions"
         v-if="goods.length"
       >
-        <!-- <template slot="bar" slot-scope="props">
+        <!-- 不再使用默认插槽 -->
+        <!-- 插槽名:bar，解构插槽 -->
+        <template v-slot:bar='props'>
           <cube-scroll-nav-bar
-            direction="vertical"
-            :labels="props.labels"
-            
-            :current="props.current"
-          >
-            <template slot-scope="props">
+              direction='vertical'
+              :labels='props.labels'
+              :txts='barTxts'
+              :current='props.current'>
+            <template v-slot:default='props'>
               <div class="text">
                 <support-ico
                   v-if="props.txt.type>=1"
@@ -22,13 +23,13 @@
                   :type="props.txt.type"
                 ></support-ico>
                 <span>{{props.txt.name}}</span>
-                <span class="num" v-if="props.txt.count">
-                  <bubble :num="props.txt.count"></bubble>
+                <span class="num" v-if="props.txt.counter">
+                  <bubble :num="props.txt.counter"></bubble>
                 </span>
               </div>
             </template>
           </cube-scroll-nav-bar>
-        </template> -->
+        </template>
         <cube-scroll-nav-panel
           v-for="good in goods"
           :key="good.name"
@@ -37,7 +38,6 @@
         >
           <ul>
             <li
-              
               v-for="food in good.foods"
               :key="food.name"
               class="food-item"
@@ -79,6 +79,8 @@
 import { getGoods } from "../api/index";
 import ShopCart from '../shop-cart/shop-cart';
 import CartControl from '../cart-control/cart-control';
+import SupportIco from '../support-ico/support-ico'
+import Bubble from '../bubble/bubble'
 
 export default {
   data() {
@@ -105,8 +107,7 @@ export default {
     },
     onAdd(target){
       this.$refs.shopCart.drop(target);
-    },
-    barTxts() {}
+    }
   },
   computed: {
     seller() {
@@ -123,11 +124,29 @@ export default {
       });
       return foodList;
 
+    },
+    barTxts() {
+      const ret= [];
+      this.goods.forEach((good) => {
+        const {type,name,foods} = good;
+        let counter = 0;
+        foods.forEach((food) => {
+          counter += food.count || 0;
+        });
+        ret.push({
+          type,
+          name,
+          counter
+        });
+      })
+      return ret;
     }
   },
     components: {
       ShopCart,
-      CartControl
+      CartControl,
+      SupportIco,
+      Bubble
     }
 
 }
