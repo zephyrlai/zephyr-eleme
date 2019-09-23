@@ -38,6 +38,8 @@
 
 <script>
   import Bubble from '../bubble/bubble'
+  import ShopCartList from '../shop-cart-list/shop-cart-list'
+import { log } from 'util'
 
   const BALL_LEN = 10
   const innerClsHook = 'inner-hook'
@@ -79,7 +81,8 @@
     data() {
       return {
         balls: createBalls(),
-        listFold: this.fold
+        listFold: this.fold,
+        shopCartListFold : false
       }
     },
     created() {
@@ -120,6 +123,16 @@
     },
     methods: {
       toggleList() {
+        if(!this.shopCartListFold){
+          if(!this.totalCount)
+            return;
+          this._showShopCartList();
+          this.shopCartListFold = true;
+        }else{
+          this._hideShopCartList();
+          this.shopCartListFold = false;
+        };
+        // this.shopCartListFold = !this.shopCartListFold;
       },
       pay(e) {
       },
@@ -161,10 +174,22 @@
         }
       },
       _showShopCartList() {
+        this.shopCartListComp = this.shopCartListComp || this.$createShopCartList({
+          $props: {
+            selectFoods: 'selectFoods'
+          },
+          $events: {
+            hideCallback:() => {
+              this.shopCartListFold = false;
+            }
+          }
+        });
+        this.shopCartListComp.show();
       },
       _showShopCartSticky() {
       },
       _hideShopCartList() {
+        this.shopCartListComp.hide();
       },
       _hideShopCartSticky() {
       }
@@ -180,7 +205,8 @@
       }
     },
     components: {
-      Bubble
+      Bubble,
+      ShopCartList
     }
   }
 </script>
